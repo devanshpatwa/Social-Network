@@ -1,4 +1,4 @@
-PLEASE REFER THE SCREENSHOTS FOLDER FOR THE SCREENSHOTS OF THE WEBSITE
+**PLEASE REFER THE SCREENSHOTS FOLDER FOR THE SCREENSHOTS OF THE WEBSITE**
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
