@@ -1,0 +1,493 @@
+import React, { Component, Fragment } from "react";
+import "../components/profile.css";
+import ProfileImage from "./profile_img";
+import PersonallInfo_detailes from "./personallInfo_detailes";
+import { Link } from "react-router-dom";
+import { Route, Router } from "react-router";
+import Header from '../header_footer/Header'; //Include Heder
+import c from '../images/c.jpg';
+
+import '../config';
+import firebase from 'firebase';
+class PersonalInfo extends Component {
+  
+  state = {
+    username:"",
+    email:"",
+    name:"",
+    lastname:"",
+    program:"",
+    branch:"",
+    city:"",
+    country:"",
+    age:"",
+    flag:0
+
+  };
+
+componentDidMount(){
+  firebase.database().ref("users").once("value").then(snapshot=>{
+    snapshot.forEach(item=>{
+      if(item.val().name==="Delara"){
+        const name=item.val().name;
+        const lastname=item.val().lastname;
+        const age=item.val().age;
+        const city=item.val().city;
+        const country=item.val().country;
+        this.setState({name})
+        this.setState({lastname})
+        this.setState({age})
+        this.setState({city})
+        this.setState({country})
+      }
+    })
+  })
+}
+ 
+
+Submit=e=>{
+ e.preventDefault();
+ firebase.database().ref("users").push({
+   username:this.state.username,
+   email:this.state.email,
+  name:this.state.name,
+  lastname:this.state.lastname,
+  program:this.state.program,
+  branch:this.state.branch,
+  city:this.state.city,
+  country:this.state.country,
+  age:this.state.age
+ });
+}
+
+ 
+  render() {
+    const fullname=this.state.name + " " +this.state.lastname;
+    const age=this.state.age;
+    const city=this.state.city;
+    const country=this.state.country;
+    return (
+      <div >
+        <div className="main-content">
+          {/* Header */}
+          <Header/>
+          <div
+            className="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
+            style={{
+              minHeight: 200,
+              
+              // backgroundColor: "#2D2D2D",
+              backgroundImage: `url(${c})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center top",
+            }}
+          >
+            {/* Mask */}
+            <span className="mask opacity-8" />
+            {/* <span className="mask bg-gradient-default opacity-8" /> */}
+            {/* Header container */}
+            <div className="container-fluid d-flex align-items-center">
+              <div className="row">
+                <div className="col-lg-7 col-md-10 mt-5">
+                  {/* <h1 className="display-2 text-white">Hello User</h1> */}
+                  <p className="text-white mt-0 mb-5">
+                    This is your profile page. You can manage your information
+                    here.
+                  </p>
+                  <a href="#!" className="btn btn-info">
+                    Edit profile
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Page content */}
+          <div className="container-fluid mt--7">
+            <div className="row">
+              <div className="col-xl-4 order-xl-2 mb-5 mb-xl-0">
+                <div className="card card-profile shadow">
+                  <div className="row justify-content-center">
+                    <div className="col-lg-3 order-lg-2">
+                      <div className="card-profile-image">
+                        <a href="#">
+                          <ProfileImage />
+                          {/* <img
+                            src="https://demos.creative-tim.com/argon-dashboard/assets/img/theme/team-4.jpg"
+                            className="rounded-circle"
+                          /> */}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+                    {/* <div className="d-flex justify-content-between">
+                      <a href="#" className="btn btn-sm btn-info mr-4">
+                        Connect
+                      </a>
+                      <a
+                        href="#"
+                        className="btn btn-sm btn-default float-right"
+                      >
+                        Message
+                      </a>
+                    </div> */}
+                  </div>
+                  <div className="card-body pt-0 pt-md-4">
+                    <div className="row">
+                      <div className="col">
+                        <div className="card-profile-stats d-flex justify-content-center mt-md-5"></div>
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      
+                      <h3>
+                      <label
+                                className="form-control-label"
+                                htmlFor="input-username"
+                              >
+                               {fullname}
+                              </label>
+                  <span className="font-weight-light">, {age}</span>
+                      </h3>
+                      <div className="h5 font-weight-300">
+                        <i className="ni location_pin mr-2" />
+                        {city}, {country}
+                      </div>
+                      <div className="h5 mt-4">
+                        <i className="ni business_briefcase-24 mr-2" />
+                        Program Name
+                      </div>
+                      <div>
+                        <i className="ni education_hat mr-2" />
+                        College Branch
+                      </div>
+
+                      <div className="h5 mt-4">
+                        <i className="ni business_briefcase-24 mr-2" />
+                        Email Address
+                      </div>
+                      <div>
+                        <i className="ni education_hat mr-2" />
+                        email
+                      </div>
+
+                      <hr className="my-4" />
+                      <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 className="mb-0">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width={24}
+                            height={24}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="feather feather-twitter mr-2 icon-inline text-info"
+                          >
+                            <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+                          </svg>
+                          Twitter
+                        </h6>
+                        <span className="text-secondary">link</span>
+                      </li>
+                      <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 className="mb-0">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width={24}
+                            height={24}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="feather feather-instagram mr-2 icon-inline text-danger"
+                          >
+                            <rect
+                              x={2}
+                              y={2}
+                              width={20}
+                              height={20}
+                              rx={5}
+                              ry={5}
+                            />
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                          </svg>
+                          Instagram
+                        </h6>
+                        <span className="text-secondary">link</span>
+                      </li>
+                      <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 className="mb-0">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width={24}
+                            height={24}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="feather feather-facebook mr-2 icon-inline text-primary"
+                          >
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                          </svg>
+                          Facebook
+                        </h6>
+                        <span className="text-secondary">link</span>
+                      </li>
+                      <div id="more_Info"></div>
+                      <button
+                        onClick={() => this.props.handleShowMoreClick()}
+                        className="btn btn-link"
+                      >
+                        Show more
+                      </button>
+
+                      <personallInfo_detailes />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-8 order-xl-1">
+                <div className="card bg-secondary shadow">
+                  <div className="card-header bg-white border-0">
+                    <div className="row align-items-center">
+                      <div className="col-8">
+                        <h3 className="mb-0">My account</h3>
+                      </div>
+                      {/* <div className="col-4 text-right">
+                        <button className="btn btn-sm btn-primary">
+                          save
+                        </button>
+                      </div> */}
+                    </div>
+                  </div>
+                  <div className="card-body">
+                  <div className="col-4 text-right">
+                        <button className="btn btn-sm btn-primary">
+                          save
+                        </button>
+                      </div>
+                    <form onSubmit={(e)=>this.Submit(e)} >
+                      <h6 className="heading-small text-muted mb-4">
+                        User information
+                      </h6>
+                   
+                      <div className="pl-lg-4">
+                        <div className="row">
+                          <div className="col-lg-6">
+                            <div className="form-group focused">
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-username"
+                              >
+                                Username
+                              </label>
+                              <input
+                                type="text"
+                                id="input-username"
+                                className="form-control form-control-alternative"
+                                placeholder="Username"
+                                defaultValue="username"
+                                onChange={e=>this.setState({username:e.target.value})}
+                            
+                              />
+                            </div>
+                          </div>
+                          <div className="col-lg-6">
+                            <div className="form-group">
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-email"
+                              >
+                                Email address
+                              </label>
+                              <input
+                                type="email"
+                                id="input-email"
+                                className="form-control form-control-alternative"
+                                placeholder="email"
+                                onChange={e=>this.setState({email:e.target.value})}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-lg-6">
+                            <div className="form-group focused">
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-first-name"
+                              >
+                                First name
+                              </label>
+                              <input
+                                type="text"
+                                id="input-first-name"
+                                className="form-control form-control-alternative"
+                                placeholder="First name"
+                                defaultValue="First name"
+                                onChange={e=>this.setState({name:e.target.value})}
+                              />
+                            </div>
+                          </div>
+                          <div className="col-lg-6">
+                            <div className="form-group focused">
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-last-name"
+                              >
+                                Last name
+                              </label>
+                              <input
+                                type="text"
+                                id="input-last-name"
+                                className="form-control form-control-alternative"
+                                placeholder="Last name"
+                                defaultValue="Last name"
+                                onChange={e=>this.setState({lastname:e.target.value})}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr className="my-4" />
+                      {/* Address */}
+                      <h6 className="heading-small text-muted mb-4">
+                        Collage information
+                      </h6>
+
+                      <div className="pl-lg-4">
+                        <div className="row">
+                          <div className="col-lg-6">
+                            <div className="form-group focused">
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-username"
+                              >
+                                Program
+                              </label>
+                              <input
+                                type="text"
+                                id="input-program"
+                                className="form-control form-control-alternative"
+                                placeholder="Program"
+                                defaultValue="..."
+                                onChange={e=>this.setState({program:e.target.value})}
+                              />
+                            </div>
+                          </div>
+                          <div className="col-lg-6">
+                            <div className="form-group">
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-branch"
+                              >
+                                Conestoga colloge branch
+                              </label>
+                              <input
+                                type="text"
+                                id="input-branch"
+                                className="form-control form-control-alternative"
+                                placeholder="..."
+                                onChange={e=>this.setState({branch:e.target.value})}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        {/* <div className="pl-lg-4">
+                        <div className="row">
+                          <div className="col-md-12">
+                            <div className="form-group focused">
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-address"
+                              >
+                                College branch
+                              </label>
+                              <input
+                                id="input-address"
+                                className="form-control form-control-alternative"
+                                placeholder="Home Address"
+                                defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
+                                type="text"
+                              />
+                            </div>
+                          </div>
+                        </div> */}
+
+                        <div className="row">
+                          <div className="col-lg-4">
+                            <div className="form-group focused">
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-city"
+                              >
+                                City
+                              </label>
+                              <input
+                                type="text"
+                                id="input-city"
+                                className="form-control form-control-alternative"
+                                placeholder="City"
+                                defaultValue=""
+                                onChange={e=>this.setState({city:e.target.value})}
+                              />
+                            </div>
+                          </div>
+                          <div className="col-lg-4">
+                            <div className="form-group focused">
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-country"
+                              >
+                                Country
+                              </label>
+                              <input
+                                type="text"
+                                id="input-country"
+                                className="form-control form-control-alternative"
+                                placeholder="Country"
+                                defaultValue=""
+                                onChange={e=>this.setState({country:e.target.value})}
+                              />
+                            </div>
+                          </div>
+                          <div className="col-lg-4">
+                            <div className="form-group">
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-age"
+                              >
+                                Age
+                              </label>
+                              <input
+                                type="number"
+                                id="input-postal-code"
+                                className="form-control form-control-alternative"
+                                placeholder=""
+                                onChange={e=>this.setState({age:e.target.value})}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default PersonalInfo;

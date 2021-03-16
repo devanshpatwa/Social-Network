@@ -1,0 +1,8 @@
+.root-events {
+  max-width: 345px;
+}
+
+.media-events {
+  height: 350px;
+  background-image: url("../src/images/login.jpg");
+}
